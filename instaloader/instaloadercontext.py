@@ -82,7 +82,9 @@ class InstaloaderContext:
                  max_connection_attempts: int = 3, request_timeout: float = 300.0,
                  rate_controller: Optional[Callable[["InstaloaderContext"], "RateController"]] = None,
                  fatal_status_codes: Optional[List[int]] = None,
-                 iphone_support: bool = True):
+                 iphone_support: bool = True,
+                 proxies: Optional[Dict[str, str]] = None,
+                 verify_ssl_cert: bool = True):
 
         self.user_agent = user_agent if user_agent is not None else default_user_agent()
         self.request_timeout = request_timeout
@@ -96,6 +98,9 @@ class InstaloaderContext:
         self.two_factor_auth_pending = None
         self.iphone_support = iphone_support
         self.iphone_headers = default_iphone_headers()
+
+        self.proxies = proxies
+        self.verify_ssl_certs = verify_ssl_cert
 
         # error log, filled with error() and printed at the end of Instaloader.main()
         self.error_log: List[str] = []
@@ -418,9 +423,9 @@ class InstaloaderContext:
             if is_other_query:
                 self._rate_controller.wait_before_query('other')
             if use_post:
-                resp = sess.post('https://{0}/{1}'.format(host, path), data=params, allow_redirects=False)
+                resp = sess.post('https://{0}/{1}'.format(host, path), data=params, allow_redirects=False, proxies=self.proxies, verify=self.verify_ssl_certs)
             else:
-                resp = sess.get('https://{0}/{1}'.format(host, path), params=params, allow_redirects=False)
+                resp = sess.get('https://{0}/{1}'.format(host, path), params=params, allow_redirects=False, proxies=self.proxies, verify=self.verify_ssl_certs)
             if resp.status_code in self.fatal_status_codes:
                 redirect = " redirect to {}".format(resp.headers['location']) if 'location' in resp.headers else ""
                 body = ""

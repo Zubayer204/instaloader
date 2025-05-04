@@ -1,0 +1,26 @@
+[project]
+name = "instaloader"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "requests",
+    "browser-cookie3"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pylint",
+    "mypy",
+    "sphinx",
+    "pyinstaller",
+    "psutil",
+    "types-requests",
+    "sphinx-autodoc-typehints",
+    "sphinxcontrib-jquery",
+    "tomli; python_version < '3.11'",
+    "dill; python_version < '3.11'",
+    "pywin32-ctypes; sys_platform == 'win32'",
+    "pefile; sys_platform == 'win32'"
+]
