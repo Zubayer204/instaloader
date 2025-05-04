@@ -7,6 +7,7 @@ import sys
 import textwrap
 import time
 import urllib.parse
+import urllib3
 import uuid
 from contextlib import contextmanager, suppress
 from datetime import datetime, timedelta
@@ -18,6 +19,7 @@ import requests.utils
 
 from .exceptions import *
 
+urllib3.disable_warnings()
 
 def copy_session(session: requests.Session, request_timeout: Optional[float] = None) -> requests.Session:
     """Duplicates a requests.Session."""
